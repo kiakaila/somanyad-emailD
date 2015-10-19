@@ -9,7 +9,7 @@
 
 #process_title
 # Log to syslog (see 'haraka -h log.syslog')
-log.syslog
+# log.syslog
 
 # CONNECT
 #toobusy
