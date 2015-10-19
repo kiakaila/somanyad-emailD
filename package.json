@@ -1,0 +1,8 @@
+{
+  "name": "haraka_local",
+  "description": "An SMTP Server",
+  "version": "0.0.1",
+  "dependencies": {
+    "request-json": "^0.5.3"
+  }
+}
