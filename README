@@ -20,4 +20,3 @@ is either the name of a plugin (without the .js extension) or the name of
 a core Haraka module, such as `Connection` or `Transaction`.
 
 To get documentation on writing a plugin type `haraka -h Plugins`.
-
