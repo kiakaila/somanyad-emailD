@@ -17,10 +17,10 @@ log.syslog
 # control which IPs, rDNS hostnames, HELO hostnames, MAIL FROM addresses, and
 # RCPT TO address you accept mail from. See 'haraka -h access'.
 access
-# connect.p0f
-# connect.geoip
+connect.p0f
+connect.geoip
 # connect.asn
-# connect.fcrdns
+connect.fcrdns
 # block mails from known bad hosts (see config/dnsbl.zones for the DNS zones queried)
 # dnsbl
 
@@ -40,7 +40,7 @@ helo.checks
 # MAIL FROM
 # Only accept mail where the MAIL FROM domain is resolvable to an MX record
 mail_from.is_resolvable
-#spf
+spf
 
 # Allow dated tagged addresses
 rcpt_to.forward
@@ -54,15 +54,15 @@ rcpt_to.in_host_list
 #rcpt_to.routes
 
 # DATA
-#bounce
+bounce
 # Check mail headers are valid
 data.headers
-#data.uribl
+data.uribl
 #attachment
-#clamd
-#spamassassin
+clamd
+spamassassin
 #dkim_sign
-#karma
+karma
 
 # QUEUE
 # queues: discard  qmail-queue  quarantine  smtp_forward  smtp_proxy
