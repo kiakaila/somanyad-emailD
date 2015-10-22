@@ -15,16 +15,18 @@ exports.hook_rcpt = function (next, connection, params) {
 	var rcpt_to = transaction.rcpt_to[0]
 
 	forward(mail_from, rcpt_to, function (err, address) {
-		if (err || address == null) {
-      err = err || new Error("address not found!");
+		if (err) {
 			next(DENY, err);
 			return;
 		}
 
-		var toAddress = new Address('<' + address + '>');
-		// var toAddress = new Address('<ljy080829@gmail.com>');
-		connection.transaction.rcpt_to.pop();
-		connection.transaction.rcpt_to.push(toAddress);
+    if (address) {
+      var toAddress = new Address('<' + address + '>');
+  		// var toAddress = new Address('<ljy080829@gmail.com>');
+  		connection.transaction.rcpt_to.pop();
+  		connection.transaction.rcpt_to.push(toAddress);
+    }
+
 		connection.relaying = true
 		next(OK);
 	});
