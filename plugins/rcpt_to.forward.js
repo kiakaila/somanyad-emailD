@@ -17,7 +17,7 @@ exports.hook_rcpt = function (next, connection, params) {
 	forward(mail_from, rcpt_to, function (err, address) {
 		if (err || address == null) {
       err = err || new Error("address not found!");
-			next(DENYSOFT, err);
+			next(DENY, err);
 			return;
 		}
 
