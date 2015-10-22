@@ -5,7 +5,7 @@ var BlackReceiveList = require("../../somanyad").BlackReceiveList;
 var EmailVerify = require("../../somanyad").EmailVerify;
 var feePlan = require("../../somanyad").feePlan;
 var m = require("moment");
-var secrets = require("../../somanyad")secrets;
+var secrets = require("../../somanyad").secrets;
 
 exports.forward = emailForward
 
