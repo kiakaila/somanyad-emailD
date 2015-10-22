@@ -7,6 +7,8 @@ var feePlan = require("../../somanyad").feePlan;
 var m = require("moment");
 var secrets = require("../../somanyad")secrets;
 
+exports.forward = emailForward
+
 // 获取真正转发目的地( 其实就是转发)
 function emailForward (mail_from, rcpt_to, cb) {
 	var toHost = rcpt_to.host;
