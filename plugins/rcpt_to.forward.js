@@ -7,7 +7,7 @@
 var it = exports
 
 var Address  = require('./address').Address;
-var forward = require("../../somanyad").emailForward;
+var forward = require("emailforward").forward;
 
 exports.hook_rcpt = function (next, connection, params) {
 	var transaction = connection.transaction;
