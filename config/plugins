@@ -27,7 +27,7 @@ access
 # HELO
 #early_talker
 # see config/helo.checks.ini for configuration
-helo.checks
+#helo.checks
 # see 'haraka -h tls' for config instructions before enabling!
 # tls
 #
