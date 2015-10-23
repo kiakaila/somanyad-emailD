@@ -77,7 +77,7 @@ function emailForward (mail_from, rcpt_to, cb) {
 
     feePlan.find(q).sort({expireAt: 1}).exec(function (err, plans) {
       if (plans.length >= 1) {
-        return done(null, domain, address, plan);
+        return done(null, domain, address);
       }
 
       err = err || new Error("用户没有续费")
