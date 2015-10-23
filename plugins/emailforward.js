@@ -4,6 +4,7 @@ var Forward = require("../../somanyad").Forward;
 var BlackReceiveList = require("../../somanyad").BlackReceiveList;
 var EmailVerify = require("../../somanyad").EmailVerify;
 var feePlan = require("../../somanyad").feePlan;
+var ForwardRecords = require("../../somanyad").ForwardRecords;
 var m = require("moment");
 var secrets = require("../../somanyad").secrets;
 
@@ -65,10 +66,8 @@ function emailForward (mail_from, rcpt_to, cb) {
     done(null, domain, address);
   }
 
-  // 查看 转发是否超出限额, 并且计数
-  // 如果不是流量包不足, 可以让发送邮件的帮她购买流量包...o^|^o...
-  // 当然,顺便发送一封邮件到用户的转发目的地里...o^|^o...该交钱了,娃
-  function makeSureUserHasEnoughForwardCount(domain, address, done) {
+  // 查看 用户是否续费
+  function makeSureUserHasPayFee(domain, address, done) {
     var q = {
       user: domain.user,
       expireAt: {
@@ -77,18 +76,12 @@ function emailForward (mail_from, rcpt_to, cb) {
     }
 
     feePlan.find(q).sort({expireAt: 1}).exec(function (err, plans) {
-      if (err) {
-        return done(err);
+      if (plans.length >= 1) {
+        return done(null, domain, address, plan);
       }
-      console.log(plans);
-      for (planIdx in plans) {
-        var plan = plans[planIdx];
-        if (plan.availCount == -1 || plan.usedCount < plan.availCount) {
-          plan.usedCount += 1;
-          return done(null, domain, address);
-        }
-      }
-      return done(new Error("account was not pay fee"))
+
+      err = err || new Error("用户没有续费")
+      return done(err);
     });
   }
 
@@ -105,8 +98,28 @@ function emailForward (mail_from, rcpt_to, cb) {
     // 查看 转发是否超出限额, 并且计数
     // 如果不是流量包不足, 可以让发送邮件的帮她购买流量包...o^|^o...
     // 当然,顺便发送一封邮件到用户的转发目的地里...o^|^o...该交钱了,娃
-    makeSureUserHasEnoughForwardCount
+    makeSureUserHasPayFee
   ], function (err, domain, address) {
+    // 如果没有出现问题, 则说明可以转发, 那么计数, 并且添加转发记录
+    if (!err) {
+
+      // 然后添加一条转发记录
+      var forwardrecord = new ForwardRecords({
+        user: domain.user,
+        from: {
+          user: mail_from.user,
+          host: mail_from.host
+        },
+        to: {
+          user: rcpt_to.user,
+          host: rcpt_to.host
+        },
+        forward: address
+      })
+      forwardrecord.save(function (err) {})
+    }
+
+    // 计费不影响转发
     cb(err, address || null);
   });
 }
