@@ -85,8 +85,6 @@ function emailForward (mail_from, rcpt_to, cb) {
     });
   }
 
-
-
   async.waterfall([
     // 查看域名是否存在, 且通过验证
     existVerifyDomain,
