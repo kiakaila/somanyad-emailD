@@ -3,7 +3,7 @@ var Domain = require("../../somanyad").Domain;
 var Forward = require("../../somanyad").Forward;
 var BlackReceiveList = require("../../somanyad").BlackReceiveList;
 var EmailVerify = require("../../somanyad").EmailVerify;
-var feePlan = require("../../somanyad").feePlan;
+var user_had_pay = require("../../somanyad").user_had_pay;
 var ForwardRecords = require("../../somanyad").ForwardRecords;
 var m = require("moment");
 var secrets = require("../../somanyad").secrets;
@@ -68,21 +68,9 @@ function emailForward (mail_from, rcpt_to, cb) {
 
   // 查看 用户是否续费
   function makeSureUserHasPayFee(domain, address, done) {
-    var q = {
-      user: domain.user,
-      expireAt: {
-        $gte: m().subtract(1, "days") // 往后延一天
-      }
-    }
-
-    feePlan.find(q).sort({expireAt: 1}).exec(function (err, plans) {
-      if (plans.length >= 1) {
-        return done(null, domain, address);
-      }
-
-      err = err || new Error("用户没有续费")
-      return done(err);
-    });
+		user_had_pay(domain.user, function (err) {
+			done(err, domain, address);
+		});
   }
 
   async.waterfall([
