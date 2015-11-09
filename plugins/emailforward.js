@@ -88,23 +88,23 @@ function emailForward (mail_from, rcpt_to, cb) {
     makeSureUserHasPayFee
   ], function (err, domain, address) {
     // 如果没有出现问题, 则说明可以转发, 那么计数, 并且添加转发记录
-    if (!err) {
-
-      // 然后添加一条转发记录
-      var forwardrecord = new ForwardRecords({
-        user: domain.user,
-        from: {
-          user: mail_from.user,
-          host: mail_from.host
-        },
-        to: {
-          user: rcpt_to.user,
-          host: rcpt_to.host
-        },
-        forward: address
-      })
-      forwardrecord.save(function (err) {})
-    }
+    // if (!err) {
+    //
+    //   // 然后添加一条转发记录
+    //   var forwardrecord = new ForwardRecords({
+    //     user: domain.user,
+    //     from: {
+    //       user: mail_from.user,
+    //       host: mail_from.host
+    //     },
+    //     to: {
+    //       user: rcpt_to.user,
+    //       host: rcpt_to.host
+    //     },
+    //     forward: address
+    //   })
+    //   forwardrecord.save(function (err) {})
+    // }
 
     // 计费不影响转发
     cb(err, address || null);
