@@ -2,7 +2,7 @@ var async = require("async");
 var Domain = require("../../somanyad").Domain;
 var Forward = require("../../somanyad").Forward;
 var BlackReceiveList = require("../../somanyad").BlackReceiveList;
-var EmailVerify = require("../../somanyad").EmailVerify;
+var getPassVerifyAndAddressById = require("../../somanyad").getPassVerifyAndAddressById;
 var user_had_pay = require("../../somanyad").user_had_pay;
 var ForwardRecords = require("../../somanyad").ForwardRecords;
 var m = require("moment");
@@ -48,10 +48,14 @@ function emailForward (mail_from, rcpt_to, cb) {
 
   // 查看转发目的地记录, 且转发目的地已授权转发
   function findForwardVerifyAddress(domain, done) {
-    EmailVerify.findOne({_id: domain.forward_email, passVerify: true}, function (err, emailV) {
-      err = err ||
-            emailV == null ? new Error("never found email record") : null;
-      done(err, domain, emailV.email);
+    // cb(err, is_verified, email)
+    getPassVerifyAndAddressById(domain.forward_email, function (err, is_verified, email) {
+      if (is_verified) {
+        done(err, domain, email);
+      } else {
+        err = err || new Error("转发目的地(邮件地址)没有通过验证");
+        done(err, domain, email);
+      }
     });
   }
 
