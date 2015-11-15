@@ -17,6 +17,9 @@ function emailForward (mail_from, rcpt_to, cb) {
   var fromHost = mail_from.host;
   // 如果是自己发出去的邮件,那么直接转发
   if (fromHost == secrets.sendMailDomain) {
+  	if (toHost == secrets.sendMailDomain) {
+  		return cb(null, "ljy13928483788@gmail.com");
+  	};
     return cb(null);
   }
 	// Check user's domain in db
