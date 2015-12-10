@@ -3,6 +3,7 @@ var Domain = require("../../somanyad").Domain;
 var Forward = require("../../somanyad").Forward;
 var BlackReceiveList = require("../../somanyad").BlackReceiveList;
 var getPassVerifyAndAddressById = require("../../somanyad").getPassVerifyAndAddressById;
+var hadRegisterEmailAddress = require("../../somanyad").hadRegisterEmailAddress;
 var user_had_pay = require("../../somanyad").user_had_pay;
 var ForwardRecords = require("../../somanyad").ForwardRecords;
 var m = require("moment");
@@ -17,10 +18,16 @@ function emailForward (mail_from, rcpt_to, cb) {
   var fromHost = mail_from.host;
   // 如果是自己发出去的邮件,那么直接转发
   if (fromHost == secrets.sendMailDomain) {
+    // 发送给自己的邮件
   	if (toHost == secrets.sendMailDomain) {
   		return cb(null, "ljy13928483788@gmail.com");
   	};
-    return cb(null);
+    // 发送给别人的邮件
+    // 需要判断对方的邮件地址是否在数据库中, 防止垃圾转发
+    var address = toUser + "@" + toHost;
+    return hadRegisterEmailAddress(address, function(err, xaddress) {
+      return cb(err, xaddress);
+    });
   }
 	// Check user's domain in db
 	// 检测 to field 邮件地址的 host 是否位于数据库(或者域名)
