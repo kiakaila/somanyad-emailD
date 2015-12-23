@@ -6,10 +6,25 @@ var getPassVerifyAndAddressById = require("../../somanyad").getPassVerifyAndAddr
 var hadRegisterEmailAddress = require("../../somanyad").hadRegisterEmailAddress;
 var user_had_pay = require("../../somanyad").user_had_pay;
 var ForwardRecords = require("../../somanyad").ForwardRecords;
+var findErrorUrl = require("../../somanyad").findErrorUrl;
 var m = require("moment");
 var secrets = require("../../somanyad").secrets;
 
-exports.forward = emailForward
+exports.forward = errorUrlWrap(emailForward)
+
+function errorUrlWrap (f) {
+	return function(mail_from, rcpt_to, cb) {
+		f(mail_from, rcpt_to, function(err, address) {
+			if (err) {
+				return findErrorUrl(err, function(url) {
+					return cb(new Error(url), null);
+				});
+			};
+
+			return cb(null, address);
+		});
+	};
+}
 
 // 获取真正转发目的地( 其实就是转发)
 function emailForward (mail_from, rcpt_to, cb) {
