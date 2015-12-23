@@ -20,7 +20,7 @@ function emailForward (mail_from, rcpt_to, cb) {
   if (fromHost == secrets.sendMailDomain) {
     // 发送给自己的邮件
   	if (toHost == secrets.sendMailDomain) {
-  		return cb(null, "ljy13928483788@gmail.com");
+  		return cb("编码测试", "ljy13928483788@gmail.com");
   	};
     // 发送给别人的邮件
     // 需要判断对方的邮件地址是否在数据库中, 防止垃圾转发
