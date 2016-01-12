@@ -39,7 +39,7 @@ access
 
 # MAIL FROM
 # Only accept mail where the MAIL FROM domain is resolvable to an MX record
-mail_from.is_resolvable
+# mail_from.is_resolvable
 #spf
 
 # Allow dated tagged addresses
